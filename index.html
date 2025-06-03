@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment master - профессиональное ПО для управления оборудованием</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="5,5"/></svg>');
+            opacity: 0.1;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .code-block {
+            color: #f8f8f2;
+            background: #111111;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            border-radius: 0 4px 4px 0;
+            margin: 1.5rem 0;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .tech-item {
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tech-item::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .screenshot {
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .screenshot:hover {
+            transform: scale(1.02);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--secondary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid var(--secondary);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+            text-align: right;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::after {
+            right: -12px;
+        }
+        
+        .right::after {
+            left: -12px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 21px;
+            }
+            
+            .left, .right {
+                left: 0;
+                text-align: left;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+        }
+        
+        .highlight {
+            color: #e74c3c;
+        }
+
+        .qt_logo {
+            display: inline-block;
+            color: white;
+            background-color: #41cd52; /* Официальный зеленый цвет Qt */
+            font-family: Arial, sans-serif; /* Используйте шрифт, похожий на логотип */
+            font-weight: bold;
+            font-size: 1em; /* Размер можно изменить по необходимости */
+            padding: 0.15em 0.3em;
+            border-radius: 0.15em;
+            line-height: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="container">
+                <h1>Equipment master</h1>
+                <p class="tagline">Профессиональное решение для управления оборудованием и средствами измерений</p>
+                <div class="btn-group">
+                    <a href="#features" class="btn">Узнать больше</a>
+                    <a href="#contact" class="btn btn-outline">Связаться</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">О проекте</h2>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <p>Equipment master - это надежное, масштабируемое и удобное приложение для управления оборудованием, разработанное с использованием современных технологий и лучших практик программирования.</p>
+                <p>Проект реализован на базе фреймворка Qt с применением модульной архитектуры, объектно-ориентированного подхода и событийно-ориентированного программирования.</p>
+            </div>
+            
+            <div class="tech-stack">
+                <div class="tech-item">C++</div>
+                <div class="tech-item">Qt Framework</div>
+                <div class="tech-item">SQLite</div>
+                <div class="tech-item">Модель-Представление</div>
+                <div class="tech-item">ООП</div>
+                <div class="tech-item">Параметризованные запросы</div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="features" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Ключевые особенности</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🧩</div>
+                    <h3 class="feature-title">Модульная архитектура</h3>
+                    <p>Четкое разделение ответственности между модулями для упрощения разработки, тестирования и поддержки.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3 class="feature-title">Работа с базой данных</h3>
+                    <p>Абстракция доступа к данным через специализированный класс Database с использованием SQLite.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Гибкий пользовательский интерфейс</h3>
+                    <p>Компонентный подход с динамическим созданием элементов и использованием системы макетов <span class="qt_logo">Qt</span>.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Модель-Представление</h3>
+                    <p>Эффективное отображение данных в таблицах с использованием <span class="qt_logo">QSqlQueryModel</span>.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h3 class="feature-title">Генерация документов</h3>
+                    <p>Создание DOCX-файлов с низкоуровневой работой с ZIP-форматом.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Событийная модель</h3>
+                    <p>Гибкое взаимодействие компонентов через систему сигналов и слотов <span class="qt_logo">Qt</span>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="architecture">
+        <div class="container">
+            <h2 class="section-title">Архитектурные решения</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Модульность</div>
+                        <p>Каждый модуль отвечает за определенную функциональность: database.cpp - работа с БД, mainwindow.cpp - основной интерфейс, forms.cpp - специализированные формы.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">ООП подход</div>
+                        <p>Использование наследования и полиморфизма для создания гибкой архитектуры. Пример - класс ClickableLabel, расширяющий QLabel.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Работа с БД</div>
+                        <p>Централизованный доступ через класс Database, параметризованные запросы для безопасности, динамическое создание таблиц SQLite.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">UI компоненты</div>
+                        <p>Динамическое создание элементов интерфейса, использование системы макетов Qt для адаптивности, компонентный подход.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Обработка данных</div>
+                        <p>Использование QVector и QStringList для хранения данных, паттерн "Модель-Представление", форматирование и валидация данных.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Генерация документов</div>
+                        <p>Низкоуровневая работа с ZIP-форматом для создания DOCX-файлов без сторонних библиотек, управление метаданными файлов.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="code-examples" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Примеры реализации</h2>
+            
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h3 style="color: var(--primary);">Динамическое создание таблиц SQLite</h3>
+                <div class="code-block">
+                    bool <span class="highlight">Database</span>::openDatabase(const <span class="highlight">QString</span> &dbName) {<br>
+                    &nbsp;&nbsp;db = <span class="highlight">QSqlDatabase</span>::addDatabase("QSQLITE");<br>
+                    &nbsp;&nbsp;db.setDatabaseName(dbName);<br>
+                    &nbsp;&nbsp;if (!db.open()) return false;<br>
+                    <br>
+                    &nbsp;&nbsp;<span class="highlight">QSqlQuery</span> query(db);<br>
+                    &nbsp;&nbsp;<span class="highlight">QString</span> createTableSI = <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"CREATE TABLE IF NOT EXISTS SI ("<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"id INTEGER PRIMARY KEY AUTOINCREMENT,"<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"inv TEXT, naim TEXT, mod TEXT, ...)";<br>
+                    &nbsp;&nbsp;if (!query.exec(createTableSI)) return false;<br>
+                    &nbsp;&nbsp;return true;<br>
+                    }
+                </div>
+                
+                <h3 style="color: var(--primary); margin-top: 3rem;">Параметризованные запросы</h3>
+                <div class="code-block">
+                    void Database::insertSI(QString &inv, QString &naim, ...) {<br>
+                    &nbsp;&nbsp;QSqlQuery query(db);<br>
+                    &nbsp;&nbsp;query.prepare("INSERT INTO SI (inv, naim, ...) "<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");<br>
+                    &nbsp;&nbsp;query.addBindValue(inv);<br>
+                    &nbsp;&nbsp;query.addBindValue(naim);<br>
+                    &nbsp;&nbsp;// ... другие параметры<br>
+                    &nbsp;&nbsp;if (!query.exec()) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;qDebug() << "Ошибка:" << query.lastError().text();<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+                
+                <h3 style="color: var(--primary); margin-top: 3rem;">Создание DOCX-файлов</h3>
+                <div class="code-block">
+                    quint32 write_local_file(QDataStream &zip, <br>
+                    &nbsp;&nbsp;const QString &name, const QByteArray &content) {<br>
+                    &nbsp;&nbsp;quint32 offset = zip.device()->pos();<br>
+                    &nbsp;&nbsp;zip << quint32(0x04034b50); // Сигнатура заголовка<br>
+                    &nbsp;&nbsp;zip << quint16(0x0014); // Версия<br>
+                    &nbsp;&nbsp;// ... другие параметры ZIP<br>
+                    &nbsp;&nbsp;zip.writeRawData(name.toLatin1().constData(), <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;name.length());<br>
+                    &nbsp;&nbsp;zip.writeRawData(content.constData(), <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;content.size());<br>
+                    &nbsp;&nbsp;return offset;<br>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Свяжитесь со мной</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p>Если вас заинтересовал проект Equipment master или у вас есть вопросы по реализации, я буду рад обсудить возможности сотрудничества.</p>
+                <div class="btn-group">
+                    <a href="mailto:contact@example.com" class="btn">Написать email</a>
+                    <a href="https://github.com/ConstructorI" class="btn btn-outline">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <h3>Equipment master</h3>
+            <p>Профессиональное решение для управления оборудованием</p>
+            
+            <div class="footer-links">
+                <a href="#about">О проекте</a>
+                <a href="#features">Возможности</a>
+                <a href="#architecture">Архитектура</a>
+                <a href="#code-examples">Примеры кода</a>
+                <a href="#contact">Контакты</a>
+            </div>
+            
+            <p class="copyright">© 2025 Equipment master. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>
