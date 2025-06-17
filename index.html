@@ -65,6 +65,10 @@
             padding: 0;
         }
 
+        html {
+             scroll-behavior: smooth;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -145,7 +149,7 @@
         .btn {
             display: inline-block;
             padding: 14px 28px;
-            margin: 0 10px;
+            margin: 5px 10px;
             font-size: 1.1rem;
             font-weight: 600;
             text-decoration: none;
@@ -240,6 +244,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
         .feature-card:hover, .architecture-card:hover, .code-card:hover {
@@ -281,7 +286,7 @@
             overflow-x: auto;
             font-size: 0.95rem;
             border: 1px solid var(--border-color);
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
         }
 
         .qt-element {
@@ -298,7 +303,9 @@
         }
 
         .code-element {
-            color: #50fa7b; /*- Green from Dracula theme*/
+            color: #ff79c6; /* Pink from Dracula theme */
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-weight: bold;
         }
         
         .contact-content { text-align: center; }
@@ -310,7 +317,7 @@
             color: var(--text-secondary);
         }
 
-        .contact-links { display: flex; justify-content: center; gap: 1.5rem; }
+        .contact-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
 
         footer {
             padding: 40px 0;
@@ -327,12 +334,12 @@
             margin-bottom: 0.5rem;
         }
         
-        footer nav { margin-bottom: 1.5rem; }
+        footer nav { margin: 1.5rem 0; }
         
         footer nav a {
             color: var(--text-secondary);
             text-decoration: none;
-            margin: 0 15px;
+            margin: 0 10px;
             transition: color 0.3s ease;
         }
         
@@ -342,6 +349,37 @@
         
         footer p {
             color: var(--text-secondary);
+        }
+        
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body::before, body::after {
+                width: 400px;
+                height: 400px;
+                filter: blur(100px);
+            }
+            
+            header { padding: 80px 0; }
+            header h1 { font-size: 2.5rem; }
+            header p { font-size: 1.1rem; }
+            
+            .btn { padding: 12px 24px; font-size: 1rem; }
+            
+            section { padding: 60px 0; }
+            section h2 { font-size: 2.2rem; margin-bottom: 3rem; }
+            
+            .about-content p { font-size: 1rem; }
+            
+            .feature-card, .architecture-card, .code-card {
+                padding: 1.5rem;
+            }
+            
+            h3 { font-size: 1.3rem; }
+            .feature-card p, .architecture-card p { font-size: 0.95rem; }
+            
+            .code-card pre { font-size: 0.85rem; padding: 1rem; }
+            
+            .contact-content p { font-size: 1rem; }
         }
     </style>
 </head>
@@ -430,6 +468,18 @@
                         <h3>Работа с БД</h3>
                         <p>Централизованный доступ через класс <code class="code-element">Database</code>, параметризованные запросы, динамическое создание таблиц SQLite.</p>
                     </div>
+                    <div class="architecture-card">
+                        <h3>UI компоненты</h3>
+                        <p>Динамическое создание элементов интерфейса, использование системы макетов Qt для адаптивности, компонентный подход.</p>
+                    </div>
+                    <div class="architecture-card">
+                        <h3>Обработка данных</h3>
+                        <p>Использование <code class="code-element">QVector</code> и <code class="code-element">QStringList</code> для хранения данных, паттерн "Модель-Представление", форматирование и валидация данных.</p>
+                    </div>
+                    <div class="architecture-card">
+                        <h3>Генерация документов</h3>
+                        <p>Низкоуровневая работа с ZIP-форматом для создания DOCX-файлов без сторонних библиотек.<br>Управление метаданными файлов.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -442,7 +492,8 @@
                         <h3>Динамическое добавление элементов в интерфейс</h3>
                         <pre>
 /* Этот фрагмент демонстрирует динамическое создание 
-элементов интерфейса для добавления данных поверки в классе add_si. */
+элементов интерфейса для добавления данных поверки в классе add_si. 
+Он подчеркивает гибкость интерфейса и работу с QHBoxLayout. */
 
 void add_si::on_pushButton_add_p_clicked() {
     QHBoxLayout *layout = new QHBoxLayout();
@@ -455,6 +506,10 @@ void add_si::on_pushButton_add_p_clicked() {
     ui->verticalLayout_p->addLayout(layout);
     layouts_p_List.append(layout);
 }
+
+/* Код позволяет пользователю динамически добавлять поля для ввода 
+данных поверки, автоматически создавая новые элементы интерфейса, 
+что делает приложение интерактивным и удобным. */
                         </pre>
                     </div>
                     <div class="code-card">
@@ -470,6 +525,30 @@ quint32 file_menu::calculate_crc32(const QByteArray &data) {
     }
     return crc ^ 0xFFFFFFFF;
 }
+
+quint32 file_menu::write_local_file(QDataStream &zip, 
+                                    const QString &name, 
+                                    const QByteArray &content) {
+    quint32 offset = zip.device()->pos();
+    zip << quint32(0x04034b50); // Сигнатура заголовка локального файла
+    zip << quint16(20);         // Версия, необходимая для извлечения
+    zip << quint16(0);          // Флаги общего назначения
+    zip << quint16(0);          // Метод сжатия (без сжатия)
+    zip << datetime_to_dos(QDateTime::currentDateTime()); // Время и дата файла
+    quint32 crc = calculate_crc32(content);
+    zip << crc;
+    zip << quint32(content.size()); // Размер сжатых данных
+    zip << quint32(content.size()); // Размер несжатых данных
+    zip << quint16(name.size());    // Длина имени файла
+    zip << quint16(0);              // Длина дополнительного поля
+    zip.write(name.toLocal8Bit());
+    zip.write(content);
+    return offset;
+}
+
+/* Этот код позволяет создавать ZIP-архивы с DOCX-файлами, 
+обеспечивая эффективное хранение и передачу документов. 
+Он использует контрольные суммы CRC32 для проверки целостности данных. */
                         </pre>
                     </div>
                     <div class="code-card">
@@ -478,14 +557,47 @@ quint32 file_menu::calculate_crc32(const QByteArray &data) {
 /* Этот фрагмент показывает, как выполняется вставка данных в таблицу SI 
 с использованием параметризованных запросов. */
 
-void Database::insertSI(QString &inv, ...) {
+void Database::insertSI(QString &inv, QString &naim, QString &mod, QString &reestr, 
+                       QString &zav, QString &pom, QString &sost, QString &PO, 
+                       QString &izg, QString &pravo, QString &date, QString &diap,
+                       QString &pov, QString &fgis, QString &temp, QString &vlag, 
+                       QString &davl, QString &napr, QString &chast, QString &tecn, 
+                       QString &clean, QString &remont) {
     QSqlQuery query(db);
-    query.prepare("INSERT INTO SI (inv, naim, ...) "
-                  "VALUES (:inv, :naim, ...)");
+    query.prepare("INSERT INTO SI (inv, naim, mod, reestr, zav, pom, "
+                        "sost, PO, izg, pravo, date, diap, pov, fgis, "
+                        "temp, vlag, davl, napr, chast, tecn, clean, remont) "
+                  "VALUES (:inv, :naim, :mod, :reestr, :zav, :pom, "
+                        ":sost, :PO, :izg, :pravo, :date, :diap, :pov, "
+                        ":fgis, :temp, :vlag, :davl, :napr, :chast, "
+                        ":tecn, :clean, :remont)");
     query.bindValue(":inv", inv);
-    // ...
+    query.bindValue(":naim", naim);
+    query.bindValue(":mod", mod);
+    query.bindValue(":reestr", reestr);
+    query.bindValue(":zav", zav);
+    query.bindValue(":pom", pom);
+    query.bindValue(":sost", sost);
+    query.bindValue(":PO", PO);
+    query.bindValue(":izg", izg);
+    query.bindValue(":pravo", pravo);
+    query.bindValue(":date", date);
+    query.bindValue(":diap", diap);
+    query.bindValue(":pov", pov);
+    query.bindValue(":fgis", fgis);
+    query.bindValue(":temp", temp);
+    query.bindValue(":vlag", vlag);
+    query.bindValue(":davl", davl);
+    query.bindValue(":napr", napr);
+    query.bindValue(":chast", chast);
+    query.bindValue(":tecn", tecn);
+    query.bindValue(":clean", clean);
+    query.bindValue(":remont", remont);
     query.exec();
 }
+/* Использование параметризованных запросов предотвращает SQL-инъекции 
+(хоть для этого проекта это и не критично), а структурированный подход
+к работе с данными демонстрирует надежность и безопасность. */
                         </pre>
                     </div>
                 </div>
